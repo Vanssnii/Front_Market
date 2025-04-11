@@ -19,6 +19,7 @@ function GaleriaPublicaciones({ search }) {
     const fetchProductos = async () => {
       try {
         const backendRes = await axios.get("https://backend-market-8jdy.onrender.com/productos");
+        console.log('Datos recibidos del backend:', backendRes.data); // Verifica los datos aquí
         const productosBackend = backendRes.data.data || backendRes.data;
         setProductos(productosBackend);
       } catch (err) {
@@ -37,7 +38,8 @@ function GaleriaPublicaciones({ search }) {
   
     return matchesSearch && matchesCategory;
   });
-
+  
+  console.log("Productos filtrados:", productosFiltrados);
 
   return (
     <div className="galeria-container">
@@ -50,5 +52,6 @@ function GaleriaPublicaciones({ search }) {
     </div>
   );
 }
+
 
 export default GaleriaPublicaciones;

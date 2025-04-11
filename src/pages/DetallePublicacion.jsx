@@ -23,6 +23,7 @@ function DetallePublicacion() {
     axios.get(`https://backend-market-8jdy.onrender.com/productos/${id}`)
       .then((res) => {
         const productoData = res.data.data || res.data;
+        console.log("Datos del producto recibidos:", productoData);
         setProducto(productoData);
         
         const imagePath = productoData.image || productoData.imagen;
@@ -115,4 +116,6 @@ function DetallePublicacion() {
   );
 }
 
+
 export default DetallePublicacion;
+

@@ -13,6 +13,7 @@ function GaleriaDestacados({ search }) {
         const response = await axios.get("https://backend-market-8jdy.onrender.com/productos");
         const productos = response.data.data || response.data;
 
+        console.log(productos);
 
         // Filtrar productos similares
         const productosFiltrados = productos.filter(producto => producto.titulo.toLowerCase().includes(search ? search.toLowerCase() : ''));
@@ -34,6 +35,7 @@ function GaleriaDestacados({ search }) {
     </div>
   );
 }
+
 
 export default GaleriaDestacados;
 
