@@ -118,4 +118,3 @@ function DetallePublicacion() {
 
 
 export default DetallePublicacion;
-
