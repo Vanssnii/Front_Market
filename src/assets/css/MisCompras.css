@@ -1,7 +1,7 @@
 .perfil-contenidor{
 
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   height: 100vh; 
  
 
@@ -10,10 +10,10 @@
 .productos-comprados {
     margin-top: 1rem;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 1rem;
   }
-  
+
   .producto-item {
     display: flex;
     align-items: center;
@@ -21,14 +21,14 @@
     border-top: 1px solid #ddd;
     padding-top: 1rem;
   }
-  
+
   .producto-imagen {
     width: 80px;
     height: 80px;
     object-fit: cover;
     border-radius: 10px;
   }
-  
+
   .producto-detalle p {
     margin: 2px 0;
   }
@@ -44,7 +44,7 @@
 
 }
 
-.compras-contenido	h2{
+.compras-contenido    h2{
   display: flex;
   align-items: flex-start;
   position: sticky;
@@ -60,7 +60,5 @@
   border-radius: 10px;
   box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
   margin: 1rem;
-  
+
 }
-
-

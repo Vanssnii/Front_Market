@@ -13,8 +13,10 @@ const Register = () => {
     email: '',
     password: '',
     direccion: '',
-    avatar: ''  // Nuevo campo para almacenar el avatar seleccionado
+    avatar: ''
   });
+
+  const [avatarError, setAvatarError] = useState(false);
 
   const handleChange = (e) => {
     setForm({
@@ -28,17 +30,25 @@ const Register = () => {
       ...prevForm,
       avatar: avatar  
     }));
+    setAvatarError(false); // Se borra el error al seleccionar
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validación del avatar
+    if (!form.avatar) {
+      setAvatarError(true);
+      return;
+    }
+
     try {
       const response = await fetch('https://backend-market-8jdy.onrender.com/usuarios/registro', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(form) // Aquí mandas el form con el avatar (nombre del avatar, no la URL)
+        body: JSON.stringify(form)
       });
 
       if (!response.ok) {
@@ -47,7 +57,6 @@ const Register = () => {
 
       const data = await response.json();
       console.log('Usuario registrado:', data);
-      // Redirigir al login después del registro exitoso
       window.location.href = '/login';
     } catch (error) {
       console.error('Error:', error);
@@ -103,7 +112,6 @@ const Register = () => {
             className="input-field"
           />
 
-          {/* Opciones de Avatar */}
           <div className="avatar-selection">
             <label htmlFor="avatar">Selecciona un avatar:</label>
             <div className="avatar-options">
@@ -132,9 +140,9 @@ const Register = () => {
                 onClick={() => handleAvatarSelect('avatar4')}
               />
             </div>
+            {avatarError && <p className="avatar-error">Debes elegir un avatar</p>}
           </div>
 
-          {/* Botón de registro */}
           <button type="button" onClick={handleSubmit} className="submit-btn">Registrarme</button>
 
           <p className="tienes-cuenta">
@@ -146,6 +154,5 @@ const Register = () => {
     </div>
   );
 };
-
 
 export default Register;
