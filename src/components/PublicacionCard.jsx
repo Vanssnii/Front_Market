@@ -22,7 +22,7 @@ function PublicacionCard({ publicacion }) {
       await axios.delete(`https://backend-market-8jdy.onrender.com/productos/${publicacion.id}`);
       alert("Publicación eliminada con éxito");
     } catch (err) {
-      setError("Error al eliminar la publicación");
+      setError("No puedes borrar productos que estén en pedidos pendientes");
       console.error(err);
     }
   };
