@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Kantumruy:wght@700&display=swap');
+
 .navbar {
   position: relative;
   display: flex;
@@ -128,8 +130,6 @@
   background: none
 }
 
-/* Asegúrate de importar las fuentes necesarias */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Kantumruy:wght@700&display=swap');
 
 /* Asegúrate de que el body y html no tengan márgenes */
 body, html {
