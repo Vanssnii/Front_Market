@@ -15,9 +15,19 @@ const MisCompras = () => {
       if (!usuario?.usuario?.id) return;
 
       try {
-        const response = await fetch(`https://backend-market-8jdy.onrender.com/pedidos?usuario_id=${usuario.usuario.id}`)
+        const response = await fetch(
+          `https://backend-market-8jdy.onrender.com/pedidos?usuario_id=${usuario.usuario.id}`
+        );
 
         const data = await response.json();
+        console.log("Respuesta cruda del backend:", data); // ✅ Para depuración
+
+        // Validamos que lo recibido sea un array
+        if (!Array.isArray(data)) {
+          console.error("La respuesta no es un array:", data); // ✅ Error claro
+          setCompras([]); // Evitamos errores si viene un objeto con error
+          return;
+        }
 
         // Agrupar productos por compra
         const comprasAgrupadas = {};

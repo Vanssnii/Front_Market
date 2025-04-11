@@ -10,9 +10,8 @@ function DetallePublicacion() {
   const [imagenes, setImagenes] = useState([]);
   const [imagenSeleccionada, setImagenSeleccionada] = useState(0);
   const [cantidad, setCantidad] = useState(1);
-  const { agregarAlCarrito, carrito } = useContext(CarritoContext);
+  const { agregarAlCarrito, carrito, disminuirCantidad } = useContext(CarritoContext);
 
-  // Mapeo de IDs de categoría a nombres
   const mapCategoriaIdToNombre = {
     1: "hombre",
     2: "mujer",
@@ -20,49 +19,41 @@ function DetallePublicacion() {
     4: "tecnologia"
   };
 
-  // Cargar el producto
   useEffect(() => {
     axios.get(`https://backend-market-8jdy.onrender.com/productos/${id}`)
       .then((res) => {
-        // Manejar ambas estructuras de respuesta posibles
         const productoData = res.data.data || res.data;
         setProducto(productoData);
         
-        // Comprobar qué propiedad contiene la imagen
         const imagePath = productoData.image || productoData.imagen;
         if (imagePath) {
           setImagenes([imagePath, imagePath + "?1", imagePath + "?2"]);
-        } else {
-          console.error("No se encontró una imagen para el producto");
         }
       })
       .catch((err) => {
         console.error("Error al obtener producto", err);
-        // Mostrar un mensaje de error al usuario
       });
   }, [id]);
 
-  // Revisar si ya hay productos con este ID en el carrito
   useEffect(() => {
     if (!producto) return;
-    const cantidadTotal = carrito
-      .filter((item) => item.id === producto.id)
-      .reduce((sum, item) => sum + item.cantidad, 0);
-    setCantidad(cantidadTotal > 0 ? cantidadTotal : 1);
+    const cantidadEnCarrito = carrito.find((item) => item.id === producto.id)?.cantidad || 0;
+    setCantidad(Math.max(cantidadEnCarrito, 1));
   }, [producto, carrito]);
 
-  console.log("Producto agregado:", producto);
   const handleAgregar = () => {
-    agregarAlCarrito({
-      ...producto,
-      cantidad,
-      vendedor_id: producto.usuario_id || producto.vendedor_id // <- aseguramos que venga este campo
-    });
+    if (!producto || cantidad <= 0) return;
+
+    for (let i = 0; i < cantidad; i++) {
+      agregarAlCarrito({
+        ...producto,
+        vendedor_id: producto.usuario_id || producto.vendedor_id,
+      });
+    }
   };
 
   if (!producto) return <p>Cargando producto...</p>;
 
-  // Acceder a las propiedades del producto con fallbacks para diferentes nombres de propiedades
   const titulo = producto.title || producto.titulo || "Sin título";
   const precio = producto.price || producto.precio || 0;
   const categoria = producto.category || mapCategoriaIdToNombre[producto.categoria_id] || "Sin categoría";
@@ -102,19 +93,23 @@ function DetallePublicacion() {
           <p><strong>Stock:</strong> {stock}</p>       
         </div>
 
-    
-
-
         <div className="detalle-cantidad">
           <p><strong>Cantidad:</strong></p>
           <div className="cantidad-control">
             <button onClick={() => setCantidad(Math.max(1, cantidad - 1))}>-</button>
             <span>{cantidad}</span>
-            <button onClick={() => setCantidad(cantidad + 1)}>+</button>
+            <button
+              onClick={() => {
+                if (cantidad < stock) setCantidad(cantidad + 1);
+              }}
+              disabled={cantidad >= stock}
+            >+</button>
           </div>
         </div>
 
-        <button className="btn-agregar" onClick={handleAgregar}>AGREGAR AL CARRITO</button>
+        <button className="btn-agregar" onClick={handleAgregar} disabled={stock === 0}>
+          {stock === 0 ? "Sin stock disponible" : "AGREGAR AL CARRITO"}
+        </button>
       </div>
     </div>
   );
